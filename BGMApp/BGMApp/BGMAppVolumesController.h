@@ -52,7 +52,10 @@ forAppWithProcessID:(pid_t)processID
                bundleID:(NSString* __nullable)bundleID;
 
 - (BGMAppVolumeAndPan) getVolumeAndPanForApp:(NSRunningApplication *)app;
+
 - (void) setVolumeAndPan:(BGMAppVolumeAndPan)volumeAndPan forApp:(NSRunningApplication*)app;
+
+- (NSArray<NSRunningApplication*>*) getRunningApplications;
 
 @end
 

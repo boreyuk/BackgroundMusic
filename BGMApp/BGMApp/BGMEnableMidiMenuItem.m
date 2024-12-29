@@ -7,6 +7,8 @@
 //
 
 #import "BGMEnableMidiMenuItem.h"
+#import "CADebugMacros.h"
+
 
 
 @implementation BGMEnableMidiMenuItem {
@@ -17,14 +19,9 @@
 
 
 void midiReadProc(const MIDIPacketList *pktlist, void * __nullable readProcRefCon, void * __nullable srcConnRefCon) {
-    if (readProcRefCon == NULL) {
-        printf("mdr\n");
+    if (readProcRefCon == NULL || srcConnRefCon == NULL) {
+        return;
     }
-    
-    if (srcConnRefCon == NULL) {
-        printf("mdr 2\n");
-    }
-    
     BGMEnableMidiMenuItem *self = (__bridge BGMEnableMidiMenuItem*)(readProcRefCon);
     [self midiPacketCallback:pktlist];
 }
@@ -36,7 +33,7 @@ void midiReadProc(const MIDIPacketList *pktlist, void * __nullable readProcRefCo
         _menuItem = menuItem;
         _menuItem.state = NSControlStateValueOn;
         menuItem.target = self;
-        menuItem.action = @selector(toggleEnableMIDI);
+        // menuItem.action = @selector(toggleEnableMIDI);
         _audioDevices = audioDevices;
         _volumeController = audioController;
     }
@@ -44,28 +41,20 @@ void midiReadProc(const MIDIPacketList *pktlist, void * __nullable readProcRefCo
     return self;
 }
 
+static MIDIClientRef client;
+static MIDIPortRef inport;
+
 - (void) connectToMIDI {
-    MIDIClientRef client;
-    CFStringRef clientName = CFStringCreateWithCString(NULL, "hello world", kCFStringEncodingUTF8);
-    OSStatus res = MIDIClientCreate(clientName, NULL, NULL, &client);
-    
-    printf("opened midi client: %d\n", res);
-    
-    MIDIPortRef inport;
-    CFStringRef portName = CFStringCreateWithCString(NULL, "LPD8 mk2", kCFStringEncodingASCII);
-    
-    res = MIDIInputPortCreate(client, portName, midiReadProc, (__bridge void * _Nullable)(self), &inport);
-    printf("opened midi port: %d\n", res);
+    CFStringRef clientName = CFStringCreateWithCString(NULL, "MIDI Client", kCFStringEncodingUTF8);
+    MIDIClientCreate(clientName, NULL, NULL, &client);
+    CFStringRef portName = CFStringCreateWithCString(NULL, "MIDI Client", kCFStringEncodingASCII);
+    MIDIInputPortCreate(client, portName, midiReadProc, (__bridge void * _Nullable)(self), &inport);
     
     MIDIEndpointRef source = MIDIGetSource(0);
     MIDIPortConnectSource(inport, source, &source);
     
-    /*
-    MIDIPortDispose(inport);
-    MIDIClientDispose(client);
     CFRelease(clientName);
     CFRelease(portName);
-    */
 }
 
 - (void) midiPacketCallback:(const MIDIPacketList *)packetList {
@@ -73,70 +62,38 @@ void midiReadProc(const MIDIPacketList *pktlist, void * __nullable readProcRefCo
     
     unsigned char byte1 = packet.data[0];
     if(byte1 >= 0x80 && byte1 <= 0xEF){
-        printf("midi: getting Channel Type..\n");
         unsigned char messageType = (byte1 & 0xF0) >> 4;
-        unsigned char messageChannel = byte1 & 0x0F;
-        printf("midi: got message %x on channel %x\n", messageType, messageChannel);
+        // unsigned char messageChannel = byte1 & 0x0F;
+        // printf("midi: got message %x on channel %x\n", messageType, messageChannel);
         if(messageType == 0xB) {
-            unsigned char byte2 = packet.data[1];
-            unsigned char byte3 = packet.data[2];
-            unsigned char controller = byte2 & 0x7F;
-            unsigned char value = byte3 & 0x7F;
-            printf("midi: got ControlChange message, controller %d, value %d\n", controller, value);
-            int normalizedValue = (int)((50.0/127.0) * value);
-            printf("normalizedVolume %d", normalizedValue);
-            [self->_volumeController setVolume:normalizedValue forAppWithProcessID:18087 bundleID:@"com.spotify.client"];
+            unsigned char controller = packet.data[1] & 0x7F;
+            unsigned char value = packet.data[2] & 0x7F;
+            // printf("midi: got ControlChange message, controller %d, value %d\n", controller, value);
+            int normalizedValue = (int)((50.0/127.0) * value); // values from midi controller are between 0;127
+            // printf("midi: normalizedVolume %d\n", normalizedValue);
+            
+            NSArray<NSRunningApplication*>* apps = [self->_volumeController getRunningApplications];
+            
+            if(controller == 36 || controller == 37) { // currently hardcoded for my akai lpd8
+                for (NSRunningApplication* app in apps) {
+                    // DebugMsg("midi: app: %s\n", [app.description cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+                    if(([app.bundleIdentifier isEqualToString:@"com.spotify.client"] && controller == 36) ||
+                       (([app.bundleIdentifier isEqualToString:@"org.mozilla.firefox"] || [app.bundleIdentifier isEqualToString:@"org.mozilla.plugincontainer"]) && controller == 37)){
+                        // printf("midi: okidoki (controller %d, target bundle %s)\n", controller, [app.description cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+                        [self->_volumeController setVolume: normalizedValue forAppWithProcessID:app.processIdentifier bundleID:app.bundleIdentifier];
+                        break;
+                    }
+                }
+            }
         }
     }
 }
-
-- (void) midiPacketCallback:(const MIDIPacketList*)pktlist refCon:(void * __nullable)readProcRefCon srcRefCon:(void * __nullable)srcConnRefCon {
-    if (readProcRefCon == NULL) {
-        printf("mdr\n");
-    }
-    
-    if (srcConnRefCon == NULL) {
-        printf("mdr 2\n");
-    }
-    MIDIPacketList packetList = *pktlist;
-    MIDIPacket packet = *packetList.packet;
-    
-    unsigned char byte1 = packet.data[0];
-    if(byte1 >= 0x80 && byte1 <= 0xEF){
-        printf("midi: getting Channel Type..\n");
-        unsigned char messageType = (byte1 & 0xF0) >> 4;
-        unsigned char messageChannel = byte1 & 0x0F;
-        printf("midi: got message %x on channel %x\n", messageType, messageChannel);
-        if(messageType == 0xB) {
-            unsigned char byte2 = packet.data[1];
-            unsigned char byte3 = packet.data[2];
-            unsigned char controller = byte2 & 0x7F;
-            unsigned char value = byte3 & 0x7F;
-            printf("midi: got ControlChange message, controller %d, value %d\n", controller, value);
-        }
-    }
-    
-    
-}
-
 
 - (void) dealloc {
-    
-}
-
-- (void) toggleEnableMIDI {
-    /*
-    if (_menuItem.state == NSControlStateValueOff) {
-        _menuItem.state = NSControlStateValueOn;
-        return;
-    }
-    _menuItem.state = NSControlStateValueOff;
-    */
-    /*
-    MIDIPortRef outport;
-    MIDIOutputPortCreate(client, (CFStringRef) "LPD 8 mk2", &outport);
-    */
-    
+    // TODO: clean up MIDI connections
+    printf("cleaning up midi menu item...");
+    MIDIPortDispose(inport);
+    MIDIClientDispose(client);
 }
 
 

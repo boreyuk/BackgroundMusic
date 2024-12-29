@@ -798,7 +798,8 @@ void    BGMPlayThrough::StopIfIdle()
                                {
                                    DebugMsg("BGMPlayThrough::StopIfIdle: BGMDevice is only running IO for BGMApp. "
                                             "Stopping playthrough.");
-                                   Stop();
+                                   // TODO: check why this conflict with midi controlling
+                                   // Stop();
                                }
                            }
                        });

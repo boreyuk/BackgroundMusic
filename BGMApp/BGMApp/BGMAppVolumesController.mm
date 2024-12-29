@@ -45,6 +45,8 @@
     // The App Volumes UI.
     BGMAppVolumes* appVolumes;
     BGMAudioDeviceManager* audioDevices;
+    
+    NSArray<NSRunningApplication*>* runningApplications;
 }
 
 #pragma mark Initialisation
@@ -60,6 +62,9 @@
 
         // Create the menu items for controlling app volumes.
         NSArray<NSRunningApplication*>* apps = [[NSWorkspace sharedWorkspace] runningApplications];
+        
+        self->runningApplications = apps;
+        
         [self insertMenuItemsForApps:apps];
 
         // Register for notifications when the user opens or closes apps, so we can update the menu.
@@ -82,13 +87,13 @@
 // Adds a volume control menu item for each given app.
 - (void) insertMenuItemsForApps:(NSArray<NSRunningApplication*>*)apps {
     NSAssert([NSThread isMainThread], @"insertMenuItemsForApps is not thread safe");
-
+    
     // TODO: Handle the C++ exceptions this method can throw. They can cause crashes because this
     //       method is called in a KVO handler.
-
+    
     // Get the app volumes currently set on the device
     CACFArray volumesFromBGMDevice([audioDevices bgmDevice].GetAppVolumes(), false);
-
+    
     for (NSRunningApplication* app in apps) {
         if ([self shouldBeIncludedInMenu:app]) {
             BGMAppVolumeAndPan initial = [self getVolumeAndPanForApp:app
@@ -98,6 +103,7 @@
                                   initialPan:initial.pan];
         }
     }
+    self->runningApplications = [self->runningApplications arrayByAddingObjectsFromArray:apps];
 }
 
 - (BGMAppVolumeAndPan) getVolumeAndPanForApp:(NSRunningApplication *)app {
@@ -159,10 +165,14 @@
 
 - (void) removeMenuItemsForApps:(NSArray<NSRunningApplication*>*)apps {
     NSAssert([NSThread isMainThread], @"removeMenuItemsForApps is not thread safe");
-
+    
     for (NSRunningApplication* app in apps) {
         [appVolumes removeMenuItemForApp:app];
     }
+    
+    NSMutableArray<NSRunningApplication*>* applications = [NSMutableArray arrayWithArray:self->runningApplications];
+    [applications removeObjectsInArray:apps];
+    self->runningApplications = [applications copy];
 }
 
 #pragma mark Accessors
@@ -228,7 +238,7 @@ forAppWithProcessID:(pid_t)processID
     if (keyPath && change && [keyPath isEqualToString:@"runningApplications"]) {
         NSArray<NSRunningApplication*>* newApps = change[NSKeyValueChangeNewKey];
         NSArray<NSRunningApplication*>* oldApps = change[NSKeyValueChangeOldKey];
-
+        
         int changeKind = [change[NSKeyValueChangeKindKey] intValue];
 
         switch (changeKind) {
@@ -251,6 +261,11 @@ forAppWithProcessID:(pid_t)processID
                 break;
         }
     }
+}
+
+- (NSArray<NSRunningApplication*>*) getRunningApplications
+{
+    return self->runningApplications;
 }
 
 @end
