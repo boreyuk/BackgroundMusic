@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,6 +21,7 @@
                 <outlet property="autoPauseMenuItemUnwrapped" destination="nHv-T8-1nb" id="Lie-Cx-jw6"/>
                 <outlet property="bgmMenu" destination="8AN-nh-rEe" id="UWn-BX-eLy"/>
                 <outlet property="debugLoggingMenuItemUnwrapped" destination="sc9-vO-KyP" id="Zyd-0v-0RN"/>
+                <outlet property="enableMidiMenuItemUnwrapped" destination="r0k-Pj-cDM" id="egr-1k-uz7"/>
                 <outlet property="outputVolumeLabel" destination="wfC-C6-SLv" id="Nuf-mo-osG"/>
                 <outlet property="outputVolumeSlider" destination="9Ru-Sc-dqC" id="wv0-Md-BwF"/>
                 <outlet property="outputVolumeView" destination="JOz-H1-mj9" id="xeJ-fk-NMI"/>
@@ -31,6 +32,9 @@
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
         <menu id="8AN-nh-rEe" userLabel="BGM Menu">
             <items>
+                <menuItem title="Connect to MIDI" id="r0k-Pj-cDM">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
                 <menuItem title="Auto-pause Music" tag="2" id="nHv-T8-1nb">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <accessibility help="Enable to automatically pause your selected music player when a different app starts playing audio." identifier="Auto-pause enabled"/>
@@ -79,7 +83,7 @@
                 </menuItem>
             </items>
             <accessibility description="Background Music Main Menu" identifier="MainMenu"/>
-            <point key="canvasLocation" x="-184" y="-69.5"/>
+            <point key="canvasLocation" x="-184.5" y="-69.5"/>
         </menu>
         <customView wantsLayer="YES" id="MWB-XH-kFI">
             <rect key="frame" x="0.0" y="0.0" width="269" height="47"/>
@@ -152,7 +156,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES" nonactivatingPanel="YES"/>
             <windowPositionMask key="initialPositionMask" topStrut="YES"/>
             <rect key="contentRect" x="248" y="350" width="1002" height="335"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1512" height="920"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1800" height="1125"/>
             <view key="contentView" id="HlB-hX-Y0Y">
                 <rect key="frame" x="0.0" y="0.0" width="1002" height="335"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -217,15 +221,15 @@
                         <rect key="frame" x="415" y="45" width="567" height="245"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" drawsBackground="NO" id="Cdb-RA-YK0">
-                            <rect key="frame" x="1" y="1" width="565" height="243"/>
+                            <rect key="frame" x="1" y="1" width="550" height="243"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" id="LSG-PF-cl8">
-                                    <rect key="frame" x="-6" y="0.0" width="577" height="243"/>
+                                    <rect key="frame" x="-6" y="0.0" width="562" height="243"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="565" height="243"/>
+                                    <size key="minSize" width="550" height="243"/>
                                     <size key="maxSize" width="594" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <allowedInputSourceLocales>
@@ -239,7 +243,7 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="qCC-lY-zQ6">
-                            <rect key="frame" x="550" y="1" width="16" height="243"/>
+                            <rect key="frame" x="551" y="1" width="15" height="243"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>

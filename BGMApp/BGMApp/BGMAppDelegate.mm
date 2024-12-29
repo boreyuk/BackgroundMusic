@@ -28,6 +28,7 @@
 #import "BGM_Utils.h"
 #import "BGMAppVolumes.h"
 #import "BGMAppVolumesController.h"
+#import "BGMEnableMidiMenuItem.h"
 #import "BGMAutoPauseMusic.h"
 #import "BGMAutoPauseMenuItem.h"
 #import "BGMDebugLoggingMenuItem.h"
@@ -71,6 +72,9 @@ static NSString* const kOptShowDockIcon      = @"--show-dock-icon";
     BGMDebugLoggingMenuItem* debugLoggingMenuItem;
     BGMXPCListener* xpcListener;
     BGMPreferredOutputDevices* preferredOutputDevices;
+    
+    BGMEnableMidiMenuItem* enableMIDIMenuItem;
+    
 }
 
 @synthesize audioDevices = audioDevices;
@@ -296,6 +300,7 @@ static NSString* const kOptShowDockIcon      = @"--show-dock-icon";
 }
 
 - (void) setUpMainMenu {
+    
     autoPauseMenuItem =
         [[BGMAutoPauseMenuItem alloc] initWithMenuItem:self.autoPauseMenuItemUnwrapped
                                         autoPauseMusic:autoPauseMusic
@@ -363,6 +368,11 @@ static NSString* const kOptShowDockIcon      = @"--show-dock-icon";
     appVolumes = [[BGMAppVolumesController alloc] initWithMenu:self.bgmMenu
                                                  appVolumeView:self.appVolumeView
                                                   audioDevices:audioDevices];
+    
+    enableMIDIMenuItem =
+        [[BGMEnableMidiMenuItem alloc] initWithMenuItem:self.enableMidiMenuItemUnwrapped
+                                       audioDevices:audioDevices
+                                      volumesController:appVolumes];
 }
 
 - (void) applicationWillTerminate:(NSNotification*)aNotification {

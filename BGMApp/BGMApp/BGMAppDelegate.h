@@ -52,6 +52,8 @@ static NSInteger const kSeparatorBelowVolumesMenuItemTag = 4;
 @property (weak) IBOutlet NSMenuItem* autoPauseMenuItemUnwrapped;
 @property (weak) IBOutlet NSMenuItem* debugLoggingMenuItemUnwrapped;
 
+@property (weak) IBOutlet NSMenuItem* enableMidiMenuItemUnwrapped;
+
 @property (readonly) BGMAudioDeviceManager* audioDevices;
 @property BGMAppVolumesController* appVolumes;
 

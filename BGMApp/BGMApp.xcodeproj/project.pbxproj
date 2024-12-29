@@ -227,6 +227,9 @@
 		27FB8C311DE4758A0084DB9D /* BGM_Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27FB8C2E1DE468320084DB9D /* BGM_Utils.cpp */; };
 		9E129A412602AE620005851B /* BGMASApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E129A402602AE620005851B /* BGMASApplication.m */; settings = {COMPILER_FLAGS = "-frandom-seed=BGMApp-BGMASApplication.m"; }; };
 		9E542C7026057FBA0016C0B5 /* BGMASApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E129A402602AE620005851B /* BGMASApplication.m */; };
+		AD2E55662D21C4A800FD67AD /* BGMEnableMidiMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AD2E55652D21C4A800FD67AD /* BGMEnableMidiMenuItem.m */; };
+		AD2E55672D21C4A800FD67AD /* BGMEnableMidiMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AD2E55652D21C4A800FD67AD /* BGMEnableMidiMenuItem.m */; };
+		AD2E55682D21C4A800FD67AD /* BGMEnableMidiMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AD2E55652D21C4A800FD67AD /* BGMEnableMidiMenuItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -437,6 +440,8 @@
 		27FB8C2E1DE468320084DB9D /* BGM_Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BGM_Utils.cpp; path = ../SharedSource/BGM_Utils.cpp; sourceTree = "<group>"; };
 		9E129A3F2602AE620005851B /* BGMASApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BGMASApplication.h; path = Scripting/BGMASApplication.h; sourceTree = "<group>"; };
 		9E129A402602AE620005851B /* BGMASApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = BGMASApplication.m; path = Scripting/BGMASApplication.m; sourceTree = "<group>"; };
+		AD2E55642D21C4A800FD67AD /* BGMEnableMidiMenuItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BGMEnableMidiMenuItem.h; sourceTree = "<group>"; };
+		AD2E55652D21C4A800FD67AD /* BGMEnableMidiMenuItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BGMEnableMidiMenuItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -667,6 +672,8 @@
 			children = (
 				1CB8B33B1BBA75EF000E2DD1 /* BGMAppDelegate.h */,
 				1CB8B33C1BBA75EF000E2DD1 /* BGMAppDelegate.mm */,
+				AD2E55642D21C4A800FD67AD /* BGMEnableMidiMenuItem.h */,
+				AD2E55652D21C4A800FD67AD /* BGMEnableMidiMenuItem.m */,
 				1C80DED120A6718600045BBE /* BGMAppWatcher.h */,
 				1C80DED220A6718600045BBE /* BGMAppWatcher.m */,
 				1C837DD61F6AA1F2004B1E60 /* BGMOutputVolumeMenuItem.h */,
@@ -1151,6 +1158,7 @@
 				1CED616C1C316E1A002CAFCF /* BGMAudioDeviceManager.mm in Sources */,
 				2743C9F11D853FBB0089613B /* BGMUserDefaults.m in Sources */,
 				1C1962FD1BCAC0C3008A4DF7 /* CADebugPrintf.cpp in Sources */,
+				AD2E55662D21C4A800FD67AD /* BGMEnableMidiMenuItem.m in Sources */,
 				1C80DED320A6718600045BBE /* BGMAppWatcher.m in Sources */,
 				2743C9EC1D852B360089613B /* BGMScriptingBridge.m in Sources */,
 				1CC6593C1F91DEB400B0CCDC /* BGMTermination.mm in Sources */,
@@ -1218,6 +1226,7 @@
 				1CD989541ECFFCFC0014BBBF /* BGMPlayThrough.cpp in Sources */,
 				1CD989551ECFFCFC0014BBBF /* BGMUserDefaults.m in Sources */,
 				1CD989561ECFFCFC0014BBBF /* BGMXPCListener.mm in Sources */,
+				AD2E55682D21C4A800FD67AD /* BGMEnableMidiMenuItem.m in Sources */,
 				1CD989411ECFFCD10014BBBF /* BGMAppDelegate.mm in Sources */,
 				1CD989341ECFFC9E0014BBBF /* BGM_Utils.cpp in Sources */,
 				1CD989351ECFFC9E0014BBBF /* CACFArray.cpp in Sources */,
@@ -1321,6 +1330,7 @@
 				1CC6593E1F91DEB400B0CCDC /* BGMTermination.mm in Sources */,
 				2743CA011D86D3CB0089613B /* BGMMusicPlayers.mm in Sources */,
 				1C62FE4E23D3EB2E00B9B68E /* MockAudioObject.cpp in Sources */,
+				AD2E55672D21C4A800FD67AD /* BGMEnableMidiMenuItem.m in Sources */,
 				2743CA021D86D3CB0089613B /* BGMiTunes.m in Sources */,
 				19FE77608F6C80D0B1F595A7 /* BGMStatusBarItem.mm in Sources */,
 				19FE7071FF5280BC38F35E1D /* BGMVolumeChangeListener.cpp in Sources */,
